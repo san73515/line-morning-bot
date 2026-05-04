@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>早安圖分享</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body { text-align: center; padding-top: 50px; font-family: sans-serif; background-color: #f4f7f6; }
+        .message { font-size: 20px; color: #333; margin-bottom: 10px; }
+        .sub-message { font-size: 14px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="message">正在為您準備福氣早安圖...</div>
+    <div class="sub-message">若稍後出現綠色畫面，請放心按下「許可」</div>
+
+    <script>
+        // 1. 初始化 LIFF
+        // ⚠️ 請把下方單引號內的文字換成你的 LIFF ID
+        liff.init({ liffId: '1657227246-M1O8hVro' }).then(() => {
+            
+            // 2. 檢查是否能使用分享功能
+            if (liff.isApiAvailable('shareTargetPicker')) {
+                liff.shareTargetPicker([
+                    {
+                        "type": "flex",
+                        "altText": "這是一份給您的早安祝福",
+                        "contents": {
+                            // 👇👇👇 這裡放我們設計好的早安圖 Flex Message JSON
+                            "type": "bubble",
+                            "hero": {
+                                "type": "image",
+                                "url": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                                "size": "full",
+                                "aspectRatio": "1:1",
+                                "aspectMode": "cover",
+                                "action": {
+                                    "type": "uri",
+                                    "uri": "https://coolcalai.com"
+                                }
+                            },
+                            "body": {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "button",
+                                        "action": {
+                                            "type": "uri",
+                                            "label": "👉 點我一鍵分享福氣給親友",
+                                            "uri": "https://liff.line.me/1657227246-M1O8hVro" 
+                                        },
+                                        "style": "primary",
+                                        "color": "#028302",
+                                        "height": "md"
+                                    }
+                                ],
+                                "paddingAll": "10px"
+                            }
+                            // 👆👆👆 JSON 結束
+                        }
+                    }
+                ])
+                .then(function (res) {
+                    if (res) {
+                        // 發送成功，自動關閉網頁回到 LINE
+                        liff.closeWindow();
+                    } else {
+                        // 使用者按了取消
+                        document.querySelector('.message').innerText = "您已取消分享";
+                        document.querySelector('.sub-message').innerText = "您可以點擊左上角 X 關閉畫面";
+                    }
+                })
+                .catch(function (error) {
+                    console.log("發生錯誤", error);
+                });
+            } else {
+                document.querySelector('.message').innerText = "您的 LINE 版本暫時不支援此功能喔";
+            }
+        });
+    </script>
+</body>
+</html>
